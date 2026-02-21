@@ -1,5 +1,6 @@
+import {setUser} from "./config";
 function main() {
-  console.log("Hello, world!");
+  setUser("Alex")
 }
 
 main();
