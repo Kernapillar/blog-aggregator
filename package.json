@@ -4,12 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "type": "module",
-  "scripts": {
     "start": "tsx ./src/index.ts"
   },
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Kernapillar/blog-aggregator.git"
@@ -23,7 +20,12 @@
   "homepage": "https://github.com/Kernapillar/blog-aggregator#readme",
   "devDependencies": {
     "@types/node": "^25.3.0",
+    "drizzle-kit": "^0.31.9",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.45.1",
+    "postgres": "^3.4.8"
   }
 }
