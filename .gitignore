@@ -1,4 +1,4 @@
 node_modules/ 
-
+.gatorconfig.json
 .env
 .env.*
