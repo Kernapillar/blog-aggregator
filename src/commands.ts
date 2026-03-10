@@ -1,6 +1,6 @@
 import { get } from "node:http";
 import { setUser, readConfig } from "./config";
-import { createUser, getUser, clearUsers } from "./lib/db/queries/users";
+import { createUser, getUser, clearUsers, getUsers } from "./lib/db/queries/users";
 export type CommandHandler = (cmdName: string, ...args: string[]) => Promise<void>; 
 
 export async function handlerLogin(cmdName: string, ...args: string[]) {
@@ -44,4 +44,14 @@ export async function handlerRegister(cmdName: string, ...args: string[]) {
 export async function handlerClearUsers(cmdName: string) {
     await clearUsers()
     console.log("Successfully deleted users table")
+}
+
+export async function handlerGetUsers(_: string) {
+    const users = await getUsers();
+    const currentUser = readConfig(); 
+    for (let user of users) {
+        let newLine = `* ${user.name}`
+        let end = user.name === currentUser.currentUserName ? " (current)" : ""
+        console.log(newLine + end)
+    }
 }
