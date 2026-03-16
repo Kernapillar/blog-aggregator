@@ -8,6 +8,13 @@
       "when": 1772079534476,
       "tag": "0000_happy_marvel_zombies",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1773695009680,
+      "tag": "0001_daffy_scarlet_spider",
+      "breakpoints": true
     }
   ]
 }
