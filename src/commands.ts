@@ -1,6 +1,8 @@
 import { setUser, readConfig } from "./config";
-import { createUser, getUser, clearUsers, getUsers } from "./lib/db/queries/users";
+import { createUser, getUser, clearUsers, getUsers, User } from "./lib/db/queries/users";
+import { createFeed, Feed } from "./lib/db/queries/feeds";
 import { fetchFeed } from "./rssfeed";
+import { feeds } from "./lib/db/schema";
 export type CommandHandler = (cmdName: string, ...args: string[]) => Promise<void>; 
 
 export async function handlerLogin(cmdName: string, ...args: string[]) {
@@ -33,7 +35,7 @@ export async function handlerRegister(cmdName: string, ...args: string[]) {
     };
     const name = args[0];
     if (await getUser(name) !== undefined ) {
-        throw new Error("User with that name already exists")
+        throw new Error("User with that name already exists");
     }
     const newUser = await createUser(name);
     setUser(name);
@@ -59,4 +61,26 @@ export async function handlerGetUsers(_: string) {
 export async function handlerAgg(cmdName: string) {
     const feed = await fetchFeed('https://www.wagslane.dev/index.xml'); 
     console.log(JSON.stringify(feed, null, 2));
+}
+
+function printFeed(feed: Feed, user: User) {
+    console.log(feed); 
+    console.log(user); 
+}
+
+export async function handlerAddFeed(cmdName: string, ...args: string[]) {
+    if (args.length < 2) {
+        throw new Error("not enough arguments to add a feed");
+    }; 
+    const user = (await getUser(readConfig().currentUserName)); 
+    if (!user) {
+        throw new Error("invalid user");
+    }
+    const [name, url] = args;
+    const feed = await createFeed(name, url, user.id); 
+    if (feed) {
+        printFeed(feed, user); 
+    } else {
+        throw new Error("feed is undefined")
+    }
 }
