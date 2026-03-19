@@ -1,4 +1,7 @@
-import { CommandRegistry, registerCommand, handlerLogin, runCommand, handlerRegister, handlerGetUsers, handlerClearUsers, handlerAgg, handlerAddFeed} from "./commands";
+import { CommandRegistry, registerCommand, handlerLogin,
+        runCommand, handlerRegister, handlerGetUsers, 
+        handlerClearUsers, handlerAgg, handlerAddFeed, 
+        handlerGetFeeds} from "./commands";
 
 async function main() {
   const cmdRegistry: CommandRegistry = {};
@@ -8,6 +11,7 @@ async function main() {
   registerCommand(cmdRegistry, "users", handlerGetUsers); 
   registerCommand(cmdRegistry, "agg", handlerAgg); 
   registerCommand(cmdRegistry, "addfeed", handlerAddFeed); 
+  registerCommand(cmdRegistry, "feeds", handlerGetFeeds); 
   const inputArgs = process.argv.slice(2); 
   if (inputArgs.length === 0) {
     console.log("One or more arguments required"); 

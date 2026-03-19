@@ -1,6 +1,6 @@
 import { setUser, readConfig } from "./config";
 import { createUser, getUser, clearUsers, getUsers, User } from "./lib/db/queries/users";
-import { createFeed, Feed } from "./lib/db/queries/feeds";
+import { createFeed, Feed, getFeeds } from "./lib/db/queries/feeds";
 import { fetchFeed } from "./rssfeed";
 import { feeds } from "./lib/db/schema";
 export type CommandHandler = (cmdName: string, ...args: string[]) => Promise<void>; 
@@ -82,5 +82,14 @@ export async function handlerAddFeed(cmdName: string, ...args: string[]) {
         printFeed(feed, user); 
     } else {
         throw new Error("feed is undefined")
+    }
+}
+
+export async function handlerGetFeeds(cmdName: string) {
+    const feeds = await getFeeds()
+    for (let feed of feeds) {
+        console.log(feed.feeds.name);
+        console.log(feed.feeds.url);
+        console.log(feed.users ? feed.users.name : "");
     }
 }
