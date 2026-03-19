@@ -91,5 +91,6 @@ export async function handlerGetFeeds(cmdName: string) {
         console.log(feed.feeds.name);
         console.log(feed.feeds.url);
         console.log(feed.users ? feed.users.name : "");
+        console.log("-------------------")
     }
 }
