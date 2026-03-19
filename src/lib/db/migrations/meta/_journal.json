@@ -15,6 +15,13 @@
       "when": 1773695009680,
       "tag": "0001_daffy_scarlet_spider",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1773934101390,
+      "tag": "0002_lean_the_watchers",
+      "breakpoints": true
     }
   ]
 }
