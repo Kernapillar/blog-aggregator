@@ -1,0 +1,43 @@
+import { setUser, readConfig } from "../config";
+import { createUser, getUser, clearUsers, getUsers } from "../lib/db/queries/users";
+
+
+export async function handlerLogin(cmdName: string, ...args: string[]) {
+    if (args.length === 0) {
+        throw new Error("Login handler expects a Username");
+    };
+    if (await getUser(args[0]) === undefined ) {
+        throw new Error(`No user with username ${args[0]} exists`)
+    }
+    setUser(args[0]); 
+    console.log(`User has been set to ${args[0]}`);
+}
+
+export async function handlerRegister(cmdName: string, ...args: string[]) {
+    if (args.length === 0) {
+        throw new Error("Login handler expects a Username");
+    };
+    const name = args[0];
+    if (await getUser(name) !== undefined ) {
+        throw new Error("User with that name already exists");
+    }
+    const newUser = await createUser(name);
+    setUser(name);
+    console.log(`New user ${name} created`);
+    console.log(newUser);
+}
+
+export async function handlerClearUsers(cmdName: string) {
+    await clearUsers()
+    console.log("Successfully deleted users table")
+}
+
+export async function handlerGetUsers(_: string) {
+    const users = await getUsers();
+    const currentUser = readConfig(); 
+    for (let user of users) {
+        let newLine = `* ${user.name}`
+        let end = user.name === currentUser.currentUserName ? " (current)" : ""
+        console.log(newLine + end)
+    }
+}

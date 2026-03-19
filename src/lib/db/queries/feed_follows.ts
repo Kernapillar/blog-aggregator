@@ -1,5 +1,5 @@
 import { db } from "..";
-import { feeds, users } from "../schema";
+import { feeds, users, feed_follows } from "../schema";
 import { eq } from "drizzle-orm"
 
 export type Feed = typeof feeds.$inferSelect; 

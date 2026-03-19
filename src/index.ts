@@ -1,8 +1,6 @@
-import { CommandRegistry, registerCommand, handlerLogin,
-        runCommand, handlerRegister, handlerGetUsers, 
-        handlerClearUsers, handlerAgg, handlerAddFeed, 
-        handlerGetFeeds} from "./commands";
-
+import { CommandRegistry, registerCommand, runCommand, } from "./commands/commands";
+import { handlerLogin, handlerRegister, handlerGetUsers, handlerClearUsers } from "./commands/users";
+import { handlerAgg, handlerAddFeed, handlerGetFeeds } from "./commands/feeds";
 async function main() {
   const cmdRegistry: CommandRegistry = {};
   registerCommand(cmdRegistry, "login", handlerLogin); 
