@@ -2,12 +2,23 @@ import { db } from "..";
 import { feeds, users, feed_follows } from "../schema";
 import { eq } from "drizzle-orm"
 
-export type Feed = typeof feeds.$inferSelect; 
+export type FeedFollow = typeof feed_follows.$inferSelect; 
 
-export async function createFeed(name: string, url: string, userId: string) {
+export async function createFeedFollow(userId: string, feedId: string) {
 
-    const [result] = await db.insert(feeds).values({ name, url, userId }).returning();
-    return result;
+    const [newFeedFollow] = await db.insert(feed_follows).values({ userId, feedId }).returning();
+    const [result] = await db.select({
+        id: feed_follows.id, 
+        createdAt: feed_follows.createdAt, 
+        updatedAt: feed_follows.updatedAt,
+        feedId: feed_follows.feedId, 
+        userId: feed_follows.userId, 
+        feedName: feeds.name, 
+        userName: users.name
+    }).from(feed_follows).innerJoin(feeds, eq(feed_follows.feedId, feeds.id))
+        .where(eq(feed_follows.id, newFeedFollow.id))
+        .innerJoin(users, eq(feed_follows.userId, users.id)); 
+    return result; 
 };
 
 export async function getFeed(name: string) {
