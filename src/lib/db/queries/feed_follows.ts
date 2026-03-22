@@ -21,13 +21,4 @@ export async function createFeedFollow(userId: string, feedId: string) {
     return result; 
 };
 
-export async function getFeed(name: string) {
-    const [result] = await db.select().from(feeds).where(eq(feeds.name, name))
-    return result; 
-}
-
-export async function getFeeds() {
-    const result = await db.select().from(feeds).leftJoin(users, eq(feeds.userId, users.id));
-    return result
-}
 
