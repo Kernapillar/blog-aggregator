@@ -1,5 +1,5 @@
 import { getFeedByUrl} from "../lib/db/queries/feeds";
-import { createFeedFollow } from "src/lib/db/queries/feed-follows";
+import { createFeedFollow, getFeedFollowsForUser} from "src/lib/db/queries/feed-follows";
 import { getUser } from "src/lib/db/queries/users";
 import { readConfig } from "src/config";
 
@@ -17,4 +17,17 @@ export async function handlerFollow(cmdName: string, url: string) {
     console.log(newFeedFollow.userName); 
 }
 
-
+export async function handlerFollowing(cmdName: string) {
+    const user = (await getUser(readConfig().currentUserName)); 
+    if (!user) {
+        throw new Error("No user currently logged in");
+    }; 
+    let feeds = await getFeedFollowsForUser(user.id);
+    if (!feeds) {
+        throw new Error("no feeds currently followed")
+    }
+    console.log(`${user.name} is following: `)
+    for (let feed of feeds) {
+        console.log(feed.feedName)
+    }
+}
