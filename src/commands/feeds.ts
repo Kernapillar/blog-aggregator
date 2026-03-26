@@ -1,4 +1,5 @@
 import { createFeed, Feed, getFeeds } from "../lib/db/queries/feeds";
+import { createFeedFollow } from "src/lib/db/queries/feed-follows";
 import { User, getUser } from "src/lib/db/queries/users";
 import { fetchFeed } from "../rssfeed";
 import { readConfig } from "src/config";
@@ -28,6 +29,8 @@ export async function handlerAddFeed(cmdName: string, ...args: string[]) {
     } else {
         throw new Error("feed is undefined")
     }
+    const feedFollow = await createFeedFollow(user.id, feed.id); 
+    console.log(`${user.name} is now following: ${feed.name}`)
 }
 
 export async function handlerGetFeeds(cmdName: string) {
