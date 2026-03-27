@@ -28,7 +28,7 @@ export async function getFeedFollowsForUser(userId: string) {
         userName: users.name
     }).from(feed_follows).innerJoin(users, eq(feed_follows.userId, users.id))
         .innerJoin(feeds, eq(feed_follows.feedId, feeds.id))
-        .where(eq(feed_follows.userId, users.id));
+        .where(eq(feed_follows.userId, userId));
     return result
 };
 
