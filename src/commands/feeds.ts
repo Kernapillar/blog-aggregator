@@ -1,6 +1,6 @@
 import { createFeed, Feed, getFeeds } from "../lib/db/queries/feeds";
 import { createFeedFollow } from "src/lib/db/queries/feed-follows";
-import { User, getUser } from "src/lib/db/queries/users";
+import { User } from "src/lib/db/queries/users";
 import { fetchFeed } from "../rssfeed";
 import { readConfig } from "src/config";
 
@@ -14,14 +14,10 @@ function printFeed(feed: Feed, user: User) {
     console.log(user); 
 }
 
-export async function handlerAddFeed(cmdName: string, ...args: string[]) {
+export async function handlerAddFeed(cmdName: string, user: User, ...args: string[]) {
     if (args.length < 2) {
         throw new Error("not enough arguments to add a feed");
     }; 
-    const user = (await getUser(readConfig().currentUserName)); 
-    if (!user) {
-        throw new Error("invalid user");
-    }
     const [name, url] = args;
     const feed = await createFeed(name, url, user.id); 
     if (feed) {
