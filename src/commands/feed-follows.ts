@@ -3,7 +3,8 @@ import { createFeedFollow, getFeedFollowsForUser, unfollow} from "src/lib/db/que
 import { getUser, User} from "src/lib/db/queries/users";
 import { readConfig } from "src/config";
 
-export async function handlerFollow(cmdName: string, user: User, url: string) {
+export async function handlerFollow(cmdName: string, user: User, ...args: string[]) {
+    const url = args[0]
     const feed = await getFeedByUrl(url); 
     if (!feed) {
         throw new Error(`invalid feed url: ${url}`); 
@@ -24,10 +25,12 @@ export async function handlerFollowing(cmdName: string, user: User) {
     }
 }
 
-export async function handlerUnfollow(cmdName: string, user: User, url: string) {
+export async function handlerUnfollow(cmdName: string, user: User, ...args: string[]) {
+    const url = args[0]
     const feed = await getFeedByUrl(url); 
     if (!feed) {
         throw new Error(`invalid feed url: ${url}`); 
     }; 
-    
+    await unfollow(user.id, feed.id); 
+    console.log(`Sucessfully unfollowed ${url}`); 
 }

@@ -1,6 +1,7 @@
 import { db } from "..";
 import { feeds, users, feed_follows } from "../schema";
-import { eq } from "drizzle-orm"
+import { eq, and } from "drizzle-orm"
+import { getFeedByUrl } from "./feeds";
 
 export type FeedFollow = typeof feed_follows.$inferSelect; 
 
@@ -32,3 +33,8 @@ export async function getFeedFollowsForUser(userId: string) {
     return result
 };
 
+export async function unfollow(userId: string, feedId: string) {
+    await db.delete(feed_follows)
+            .where(and(eq(feed_follows.userId, userId), 
+                        eq(feed_follows.feedId, feedId)))
+}
