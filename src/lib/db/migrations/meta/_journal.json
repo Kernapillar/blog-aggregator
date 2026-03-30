@@ -22,6 +22,13 @@
       "when": 1773934101390,
       "tag": "0002_lean_the_watchers",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1774844606575,
+      "tag": "0003_sloppy_ronan",
+      "breakpoints": true
     }
   ]
 }
