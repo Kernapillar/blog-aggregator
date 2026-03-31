@@ -1,6 +1,6 @@
 import { db } from "..";
 import { feeds, users } from "../schema";
-import { eq } from "drizzle-orm"
+import { eq, sql} from "drizzle-orm"
 
 export type Feed = typeof feeds.$inferSelect; 
 
@@ -25,3 +25,6 @@ export async function getFeeds() {
     return result
 }
 
+export async function markFeedFetched(id: string) {
+    await db.update(feeds).set({lastFetchedAt: new Date()}).where(eq(feeds.id, id))
+}
