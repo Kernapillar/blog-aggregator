@@ -28,3 +28,8 @@ export async function getFeeds() {
 export async function markFeedFetched(id: string) {
     await db.update(feeds).set({lastFetchedAt: new Date()}).where(eq(feeds.id, id))
 }
+
+export async function getNextFeedToFetch() {
+    const [result] = await db.select().from(feeds).orderBy(sql`${feeds.lastFetchedAt} asc nulls first`).limit(1); 
+    return result; 
+}
