@@ -1,4 +1,4 @@
-import { createFeed, Feed, getFeeds } from "../lib/db/queries/feeds";
+import { createFeed, Feed, getFeeds,markFeedFetched, getNextFeedToFetch, getFeedByUrl} from "../lib/db/queries/feeds";
 import { createFeedFollow } from "src/lib/db/queries/feed-follows";
 import { User } from "src/lib/db/queries/users";
 import { fetchFeed } from "../rssfeed";
@@ -36,5 +36,18 @@ export async function handlerGetFeeds(cmdName: string) {
         console.log(feed.feeds.url);
         console.log(feed.users ? feed.users.name : "");
         console.log("-------------------")
+    }
+}
+
+export async function scrapeFeeds() {
+    const nextFeed = await getNextFeedToFetch(); 
+    if (!nextFeed) {
+        console.log("no next feed available")
+        return; 
+    }
+    await markFeedFetched(nextFeed.id); 
+    const feed = await fetchFeed(nextFeed.url); 
+    for (let feedItem of feed.channel.item) {
+        console.log(feedItem.title); 
     }
 }
