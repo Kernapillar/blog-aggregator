@@ -4,7 +4,7 @@ import { User } from "src/lib/db/queries/users";
 import { fetchFeed } from "../rssfeed";
 import { readConfig } from "src/config";
 
-export async function handlerAgg(cmdName: string) {
+export async function handlerAgg(cmdName: string, time_between_reqs: string) {
     const feed = await fetchFeed('https://www.wagslane.dev/index.xml'); 
     console.log(JSON.stringify(feed, null, 2));
 }
@@ -50,4 +50,29 @@ export async function scrapeFeeds() {
     for (let feedItem of feed.channel.item) {
         console.log(feedItem.title); 
     }
+}
+
+export function parseDuration(durationStr: string) {
+    const regex = /^(\d+)(ms|s|m|h)$/;
+    const match = durationStr.match(regex);
+    if (!match || match.length < 3) {
+        return; 
+    }
+    const timeUnit = match[2]
+    let miliseconds; 
+    switch (timeUnit) {
+        case "s":
+            miliseconds = parseInt(match[1]) * 1000 
+            break;
+        case "m":
+            miliseconds = parseInt(match[1]) * 60 * 1000 
+            break;
+        case "h":
+            miliseconds = parseInt(match[1]) * 60 * 60 * 1000             
+            break;
+        case "ms":
+            miliseconds = parseInt(match[1])         
+            break;
+    }
+    return miliseconds; 
 }
