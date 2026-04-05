@@ -27,6 +27,6 @@ export function middlewareLoggedIn(handler: UserCommandHandler): CommandHandler 
     }
 }
 
-function handleError(err: unknown) {
+export function handleError(err: unknown) {
     console.error(`Error scraping feeds: ${err instanceof Error ? err.message : err}`); 
 }
