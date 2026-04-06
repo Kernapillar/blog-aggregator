@@ -3,10 +3,28 @@ import { createFeedFollow } from "src/lib/db/queries/feed-follows";
 import { User } from "src/lib/db/queries/users";
 import { fetchFeed } from "../rssfeed";
 import { readConfig } from "src/config";
+import { handleError } from "./commands";
 
 export async function handlerAgg(cmdName: string, time_between_reqs: string) {
-    const feed = await fetchFeed('https://www.wagslane.dev/index.xml'); 
-    console.log(JSON.stringify(feed, null, 2));
+
+    const timeBetween = parseDuration(time_between_reqs); 
+    if (!timeBetween) {
+        throw new Error(`Invalid duration, please use a proper format (1s, 2m, 3h, 500ms)`)
+    }
+
+    console.log(`fetching feeds every ${timeBetween} ms: `); 
+    scrapeFeeds().catch(handleError); 
+
+    const interval = setInterval(() => {
+        scrapeFeeds().catch(handleError); 
+    }, timeBetween); 
+    await new Promise<void>((resolve) => {
+        process.on("SIGINT", () => {
+            console.log("Shutting down feed aggregation..."); 
+            clearInterval(interval); 
+            resolve(); 
+        })
+    })
 }
 
 function printFeed(feed: Feed, user: User) {
