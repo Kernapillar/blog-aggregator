@@ -1,6 +1,7 @@
 import { createFeed, Feed, getFeeds,markFeedFetched, getNextFeedToFetch, getFeedByUrl} from "../lib/db/queries/feeds";
 import { createFeedFollow } from "src/lib/db/queries/feed-follows";
 import { User } from "src/lib/db/queries/users";
+import { createPost } from "src/lib/db/queries/posts";
 import { fetchFeed } from "../rssfeed";
 import { readConfig } from "src/config";
 import { handleError } from "./commands";
@@ -66,7 +67,17 @@ export async function scrapeFeeds() {
     await markFeedFetched(nextFeed.id); 
     const feed = await fetchFeed(nextFeed.url); 
     for (let feedItem of feed.channel.item) {
-        console.log(feedItem.title); 
+        try {
+            await createPost({
+                title: feedItem.title, 
+                url: feedItem.link, 
+                description: feedItem.description, 
+                publishedAt: new Date(feedItem.pubDate),
+                feedId: nextFeed.id
+            });  
+        } catch {
+            console.log("unable to create new Post"); 
+        }
     }
 }
 
