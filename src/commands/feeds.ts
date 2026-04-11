@@ -78,8 +78,8 @@ export async function scrapeFeeds() {
                 publishedAt: new Date(feedItem.pubDate),
                 feedId: nextFeed.id
             });  
-        } catch {
-            console.log("unable to create new Post"); 
+        } catch (err) {
+            console.log("unable to create new Post", err); 
         }
     }
 }
