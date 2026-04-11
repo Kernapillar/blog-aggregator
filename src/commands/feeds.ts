@@ -1,13 +1,16 @@
 import { createFeed, Feed, getFeeds,markFeedFetched, getNextFeedToFetch, getFeedByUrl} from "../lib/db/queries/feeds";
 import { createFeedFollow } from "src/lib/db/queries/feed-follows";
 import { User } from "src/lib/db/queries/users";
-import { createPost } from "src/lib/db/queries/posts";
+import { createPost, getPostsForUser } from "src/lib/db/queries/posts";
 import { fetchFeed } from "../rssfeed";
 import { readConfig } from "src/config";
 import { handleError } from "./commands";
 
 export async function handlerAgg(cmdName: string, time_between_reqs: string) {
 
+    if (!time_between_reqs) {
+        time_between_reqs = "10s"
+    }
     const timeBetween = parseDuration(time_between_reqs); 
     if (!timeBetween) {
         throw new Error(`Invalid duration, please use a proper format (1s, 2m, 3h, 500ms)`)
@@ -104,4 +107,12 @@ export function parseDuration(durationStr: string) {
             break;
     }
     return miliseconds; 
+}
+
+export async function handlerBrowse(cmdName: string, user: User, ...args: string[]) {
+    const limit = args[0] ? parseInt(args[0]) : 2
+    const posts = await getPostsForUser(user.id, limit); 
+    for (let post of posts) {
+        console.log(post); 
+    }
 }

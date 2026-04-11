@@ -1,6 +1,6 @@
 import { CommandRegistry, registerCommand, runCommand, } from "./commands/commands";
 import { handlerLogin, handlerRegister, handlerGetUsers, handlerClearUsers } from "./commands/users";
-import { handlerAgg, handlerAddFeed, handlerGetFeeds } from "./commands/feeds";
+import { handlerAgg, handlerAddFeed, handlerGetFeeds, handlerBrowse } from "./commands/feeds";
 import { handlerFollow, handlerFollowing, handlerUnfollow} from "./commands/feed-follows";
 import { middlewareLoggedIn } from "./commands/commands";
 async function main() {
@@ -15,6 +15,7 @@ async function main() {
   registerCommand(cmdRegistry, "follow", middlewareLoggedIn(handlerFollow)); 
   registerCommand(cmdRegistry, "unfollow", middlewareLoggedIn(handlerUnfollow)); 
   registerCommand(cmdRegistry, "following", middlewareLoggedIn(handlerFollowing)); 
+  registerCommand(cmdRegistry, "browse", middlewareLoggedIn(handlerBrowse)); 
   const inputArgs = process.argv.slice(2); 
   if (inputArgs.length === 0) {
     console.log("One or more arguments required"); 
